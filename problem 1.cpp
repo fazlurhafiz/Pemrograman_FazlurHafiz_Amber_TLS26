@@ -1,35 +1,36 @@
-#include<iostream>
-#include<vector>
+#include <iostream>
 using namespace std;
-int n,k,pos=0;
-int main(){
-    cout<<"Masukkan N: ";
-    cin>>n;
-    cout<<"Masukkan K: ";
-    cin>>k;
-    if(k<2){
-        k=2;
+
+int AstronautRec(int person[], int size, int k, int index) {
+    if (size == 1) {
+        return person[0];
     }
-    vector<int> astronaut;
-    for(int i=1; i<=n; i++) {
-        astronaut.push_back(i);
+
+    index = (index + k) % size;
+
+    for (int i = index; i < size - 1; i++) {
+        person[i] = person[i + 1];
     }
-    cout<<endl<<"Urutan eliminasi: ";
-    while(astronaut.size()>1){
-        pos=(pos+k-1)%astronaut.size();
-        int eliminated=astronaut[pos];
-        cout<<eliminated<<" ";
-        astronaut.erase(astronaut.begin()+pos);
-        if(eliminated%2==0){
-            k+=2;
-        }
-        else{
-            k--;
-            if(k<2){
-                k=2;
-            }
-        }
+
+    return AstronautRec(person, size - 1, k, index);
+}
+
+int Astronaut(int n, int k) {
+    int index = 0;
+    int person[1000]; 
+    for (int i = 0; i < n; i++) {
+        person[i] = i;
     }
-    cout<<endl<<"Astronaut terakhir: "<<astronaut[0]<<endl;
+    return AstronautRec(person, n, k, index);
+}
+
+int main() {
+    int n, k;
+    cout << "Masukkan jumlah astronaut: ";
+    cin >> n;
+    cout << "Masukkan jumlah langkah: ";
+    cin >> k;
+    cout << "Astronaut yang selamat adalah: " << Astronaut(n, k) << endl;
+    
     return 0;
 }
